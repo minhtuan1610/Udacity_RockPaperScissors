@@ -39,10 +39,8 @@ class Game:
             pass
         elif beats(move1, move2):
             point1 += 1
-            return point1
         else:
             point2 += 1
-            return point2
 
         self.p1.learn(move1, move2)
         self.p2.learn(move2, move1)
@@ -67,5 +65,3 @@ if __name__ == "__main__":
     point1 = 0
     point2 = 0
     game.play_game(point1, point2)
-    # test = RandomPlayer().move()
-    # print(test)
