@@ -1,7 +1,5 @@
 import random
 
-moves = ["rock", "paper", "scissors"]
-
 
 class Player:
     def move(self):
@@ -11,15 +9,55 @@ class Player:
         pass
 
 
+class HumanPlayer(Player):
+    def move(self):
+        choice = None
+        if choice not in moves:
+            choice = input(
+                "What is your choice? rock, paper, scissors\n"
+            ).lower()
+        return choice
+
+
+# Random move each round
 class RandomPlayer(Player):
     def move(self):
         return random.choice(moves)
 
 
-class HumanPlayer(Player):
+# Remember the last move of opponent, play the same move in this round
+class ReflectPlayer(Player):
+    def __init__(self):
+        self.opponent_move = None
+
     def move(self):
-        choice = input("What is your choice?\n")
-        return choice
+        if self.opponent_move is None:
+            return random.choice(moves)
+        return self.opponent_move
+
+    def learn(self, their_move):
+        self.opponent_move = their_move
+
+
+# Remember the last move of opponent, play the next move in this round
+class CyclePlayer(Player):
+    def __init__(self):
+        self.opponent_move = None
+
+    def move(self):
+        if self.opponent_move is None:
+            return random.choice(moves)
+        return self.opponent_move
+
+    def learn(self, their_move):
+        if their_move is "rock":
+            self.opponent_move = "paper"
+        elif their_move is "paper":
+            self.opponent_move = "scissors"
+        else:
+            self.opponent_move = "rock"
+
+        return self.opponent_move
 
 
 def beats(one, two):
@@ -48,8 +86,7 @@ class Game:
         else:
             point2 += 1
 
-        self.p1.learn(move1, move2)
-        self.p2.learn(move2, move1)
+        self.p2.learn(move1)
 
         return point1, point2
 
@@ -63,11 +100,22 @@ class Game:
 
             print(f"Player 1: {point1} points  Player 2: {point2} points")
 
+        if point1 > point2:
+            print(f"Player 1 won {point1} - {point2} ")
+        elif point1 < point2:
+            print(f"Player 2 won {point2} - {point1} ")
+        else:
+            print(f"Both players tie at {point1} - {point2} ")
+
         print("Game over!")
 
 
 if __name__ == "__main__":
-    game = Game(HumanPlayer(), RandomPlayer())
+    game = Game(HumanPlayer(), CyclePlayer())
+
     point1 = 0
     point2 = 0
+
+    moves = ["rock", "paper", "scissors"]
+
     game.play_game(point1, point2)
