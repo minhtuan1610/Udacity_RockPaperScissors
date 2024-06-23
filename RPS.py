@@ -12,7 +12,7 @@ class Player:
 class HumanPlayer(Player):
     def move(self):
         choice = None
-        if choice not in moves:
+        while choice not in moves:
             choice = input(
                 "What is your choice? rock, paper, scissors\n"
             ).lower()
@@ -50,9 +50,9 @@ class CyclePlayer(Player):
         return self.opponent_move
 
     def learn(self, their_move):
-        if their_move is "rock":
+        if their_move == "rock":
             self.opponent_move = "paper"
-        elif their_move is "paper":
+        elif their_move == "paper":
             self.opponent_move = "scissors"
         else:
             self.opponent_move = "rock"
