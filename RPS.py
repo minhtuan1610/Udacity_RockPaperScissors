@@ -119,10 +119,12 @@ if __name__ == "__main__":
     game = Game(
         HumanPlayer(),
         random.choice(
-            ConsistentPlayer(),
-            RandomPlayer(),
-            ReflectPlayer(),
-            CyclePlayer(),
+            [
+                ConsistentPlayer(),
+                RandomPlayer(),
+                ReflectPlayer(),
+                CyclePlayer(),
+            ]
         ),
     )
 
