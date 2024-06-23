@@ -19,6 +19,11 @@ class HumanPlayer(Player):
         return choice
 
 
+class ConsistentPlayer(Player):
+    def move(self):
+        return "rock"
+
+
 # Random move each round
 class RandomPlayer(Player):
     def move(self):
@@ -111,7 +116,15 @@ class Game:
 
 
 if __name__ == "__main__":
-    game = Game(HumanPlayer(), CyclePlayer())
+    game = Game(
+        HumanPlayer(),
+        random.choice(
+            ConsistentPlayer(),
+            RandomPlayer(),
+            ReflectPlayer(),
+            CyclePlayer(),
+        ),
+    )
 
     point1 = 0
     point2 = 0
