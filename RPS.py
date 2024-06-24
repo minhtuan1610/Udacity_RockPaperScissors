@@ -47,22 +47,22 @@ class ReflectPlayer(Player):
 # Remember the last move of opponent, play the next move in this round
 class CyclePlayer(Player):
     def __init__(self):
-        self.opponent_move = None
+        self.update_move = None
 
     def move(self):
-        if self.opponent_move is None:
+        if self.update_move is None:
             return random.choice(moves)
-        return self.opponent_move
+        return self.update_move
 
-    def learn(self, their_move):
-        if their_move == "rock":
-            self.opponent_move = "paper"
-        elif their_move == "paper":
-            self.opponent_move = "scissors"
+    def learn(self, last_move):
+        if last_move == "rock":
+            self.update_move = "paper"
+        elif last_move == "paper":
+            self.update_move = "scissors"
         else:
-            self.opponent_move = "rock"
+            self.update_move = "rock"
 
-        return self.opponent_move
+        return self.update_move
 
 
 def beats(one, two):
@@ -91,7 +91,10 @@ class Game:
         else:
             point2 += 1
 
-        self.p2.learn(move1)
+        if self.p2 is ReflectPlayer():
+            self.p2.learn(move1)
+        elif self.p2 is CyclePlayer():
+            self.p2.learn(move2)
 
         return point1, point2
 
