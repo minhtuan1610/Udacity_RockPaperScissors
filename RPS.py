@@ -55,6 +55,11 @@ class CyclePlayer(Player):
         return self.update_move
 
     def learn(self, last_move):
+        """
+        Returns the cycle move of players
+        Args: last_move: string
+        Returns: self.update_move: string
+        """
         if last_move == "rock":
             self.update_move = "paper"
         elif last_move == "paper":
