@@ -47,11 +47,12 @@ class ReflectPlayer(Player):
 # Remember the last move of opponent, play the next move in this round
 class CyclePlayer(Player):
     def __init__(self):
+        self.name = "Cycle Player"
         self.update_move = None
 
     def move(self):
         if self.update_move is None:
-            return random.choice(moves)
+            self.update_move = random.randint(0, len(moves)) % len(moves)
         return self.update_move
 
     def learn(self, last_move):
@@ -96,9 +97,9 @@ class Game:
         else:
             point2 += 1
 
-        if self.p2 is ReflectPlayer():
+        if isinstance(self.p2, ReflectPlayer):
             self.p2.learn(move1)
-        elif self.p2 is CyclePlayer():
+        elif isinstance(self.p2, CyclePlayer):
             self.p2.learn(move2)
 
         return point1, point2
@@ -106,7 +107,8 @@ class Game:
     def play_game(self, point1, point2):
         print("Game start!")
 
-        for round in range(3):
+        self.rounds = 3
+        for round in range(self.rounds):
             print(f"Round {round}:")
 
             point1, point2 = self.play_round(point1, point2)
@@ -124,18 +126,20 @@ class Game:
 
 
 if __name__ == "__main__":
-    game = Game(
-        HumanPlayer(),
-        random.choice(
-            [
-                ConsistentPlayer(),
-                RandomPlayer(),
-                ReflectPlayer(),
-                CyclePlayer(),
-            ]
-        ),
-    )
+    # game = Game(
+    #     HumanPlayer(),
+    #     random.choice(
+    #         [
+    #             ConsistentPlayer(),
+    #             RandomPlayer(),
+    #             ReflectPlayer(),
+    #             CyclePlayer(),
+    #         ]
+    #     ),
+    # )
 
+    game = Game(HumanPlayer(), CyclePlayer())
+    print(f"Player 2 is {game.p2.name}")
     point1 = 0
     point2 = 0
 
